@@ -1,0 +1,28 @@
+import math
+
+INF = math.inf
+
+n = int(input("Enter the number of vertices: "))
+
+print("Enter the distance matrix row by row (use 'inf' for no edge):")
+dist = []
+for i in range(n):
+    while True:
+        row = input(f"Row {i}: ").split()
+        if len(row) != n:
+            print(f"Please enter exactly {n} values.")
+            continue
+        try:
+            dist.append([INF if x.lower() == "inf" else float(x) for x in row])
+            break
+        except ValueError:
+            print("Invalid value. Use numbers or 'inf'.")
+
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+print("\nShortest distance matrix:")
+for row in dist:
+    print([x if x == INF else int(x) if x == int(x) else x for x in row])
