@@ -1,0 +1,50 @@
+def TSP(curr, visited, cost, dp):
+    n = len(cost)
+
+    if len(visited) == n:
+        return cost[curr][0]
+
+    key = (curr, tuple(sorted(visited)))
+
+    if key in dp:
+        return dp[key]
+
+    ans = float("inf")
+
+    for i in range(n):
+        if i not in visited:
+            visited.append(i)
+
+            total = cost[curr][i] + TSP(i, visited, cost, dp)
+
+            ans = min(ans, total)
+
+            visited.pop()
+
+    dp[key] = ans
+
+    return ans
+
+n = int(input("Enter the number of cities: "))
+print("Enter the cost matrix row by row (space-separated):")
+
+cost = []
+for i in range(n):
+    while True:
+        row = input(f"Row {i}: ").split()
+        if len(row) != n:
+            print(f"Please enter exactly {n} values.")
+            continue
+        try:
+            cost.append([float(x) for x in row])
+            break
+        except ValueError:
+            print("Invalid value. Use numbers only.")
+
+dp = {}
+
+visited = [0]
+
+result = TSP(0, visited, cost, dp)
+
+print("Minimum TSP Cost:", int(result) if result == int(result) else result)
